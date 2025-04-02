@@ -1,0 +1,7 @@
+---
+loader: src/fritz_ds_example/titanic/titanic_data_cfg.yaml
+model_cfg: src/fritz_ds_example/titanic/models/titanic_lgbm.yaml
+output_folder: outputs
+cv_model_file_name: best_cv_model.yaml
+trained_model_file_name: trained_model.yaml
+pred_df_file_name: predictions.csv

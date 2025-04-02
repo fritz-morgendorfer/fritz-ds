@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+
+# ide
+.idea/
+.vscode/
+
+#data
+data/
+
+# output files
+outputs/

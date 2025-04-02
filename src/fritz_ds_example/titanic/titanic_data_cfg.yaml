@@ -1,0 +1,18 @@
+---
+class: fritz_ds_lib.data_loading.load.DataLoader
+train:
+  class: fritz_ds_lib.data_loading.load.OpenMlRawDataLoader
+  name: Titanic
+  version: 1
+spliter:
+  class: fritz_ds_lib.model_selection.split.SklearnTrainTestSpliter
+  train_size: 0.7
+  validation_size: 0.15
+  test_size: 0.15
+  random_state: 42
+  stratify: survived
+target_name: survived
+renaming_mapper: {}
+parse_dates: []
+dtype:
+  survived: int

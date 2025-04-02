@@ -1,0 +1,50 @@
+---
+class: fritz_ds_lib.core.model.ModelConfig
+col_target: survived
+col_output: survived_hat
+col_idx: null
+prep_pipeline:
+    class: fritz_ds_example.titanic.pipelines.tree_based.TitanicTreeBasedPipeCfg
+    cols_features:
+        - pclass
+        - sex
+        - age
+    pipeline_obj_path: fritz_ds_example.titanic.pipelines.tree_based.make_pipeline
+estimator:
+    class: fritz_ds_lib.estimator.wrapper.LgbmClassifierWrapper
+    cols_categorical:
+        - pclass
+        - sex
+    params:
+        bagging_fraction: 0.8
+        bagging_freq: 0
+        boosting: gbdt
+        cat_l2: 10.0
+        cat_smooth: 10.0
+        device_type: cpu
+        early_stopping_rounds: -1
+        extra_trees: false
+        feature_fraction: 1.0
+        lambda_l1: 0.0
+        lambda_l2: 0.0
+        learning_rate: 0.3
+        linear_lambda: 0.0
+        max_cat_to_onehot: 4
+        max_depth: 30
+        min_data_in_leaf: 50
+        n_estimators: 150
+        num_leaves: 31
+        num_threads: -1
+        objective: cross_entropy
+        seed: 42
+        tree_learner: serial
+        use_missing: true
+        verbosity: 0
+        zero_as_missing: false
+cv:
+    param_grid:
+        estimator__max_depth: [10, 30]
+        estimator__min_data_in_leaf: [100, 300]
+        estimator__num_leaves: [31, 100, 200]
+        estimator__n_estimators: [50, 100, 150]
+    scoring: neg_log_loss

@@ -1,0 +1,8 @@
+name: fritz-ds
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10.16
+  - pip=24
+  - pip:
+      - -e .[dev]

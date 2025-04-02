@@ -1,0 +1,29 @@
+# Configuration for pre-commit hooks, see: https://pre-commit.com/
+default_language_version:
+  python: python3.10
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]
+        # 1 MB - Don't commit notebooks with output!
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: detect-private-key
+  - repo: https://github.com/pycqa/isort
+    rev: "5.12.0"
+    hooks:
+      - id: isort
+        name: isort (python)
+  - repo: https://github.com/psf/black
+    rev: "22.12.0"
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/flake8
+    # docs: https://flake8.pycqa.org/en/latest/user/using-hooks.html?highlight=commit
+    rev: "4.0.1"
+    hooks:
+      - id: flake8
