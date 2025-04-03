@@ -1,0 +1,62 @@
+name: checks
+
+on:
+  pull_request_target:
+    types: [ opened, synchronize, reopened, labeled, unlabeled ]
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  BRANCH: ${{github.head_ref}}
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10']
+        deps:
+          - dev
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: cancel all outdated workflows
+        if: |
+          startsWith(github.ref, 'refs/heads/') || startsWith(github.event_name, 'pull_request')
+        uses: ./checks
+        with:
+          check: cancel-uncompleted-workflows
+          args: "--token ${{ secrets.GITHUB_TOKEN }} --workflows cw.yml --preserve-run most-recent"
+
+      - name: enable python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: install this python package with dependencies [${{ matrix.deps }}]
+        run: pip install -e ".[${{ matrix.deps }}]"
+
+      - name: Show versions of installed libraries
+        run: pip list
+
+      - name: lint with flake8
+        id: run-flake
+        run: flake8 src
+
+      - name: run tests
+        id: run-pytest
+        run: pytest test
+
+      - name: Fail if flake check fails
+        if: steps.run-flake.outputs.success != 'true'
+        run: exit 1
+      - name: Fail if tests failed
+        if: steps.run-pytest.outputs.success != 'true'
+        run: exit 1
