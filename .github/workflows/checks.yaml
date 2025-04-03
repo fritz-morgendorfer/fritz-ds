@@ -40,11 +40,11 @@ jobs:
 
       - name: lint with flake8
         id: run-flake
-        run: flake8 src
+        run: flake8 ./src
 
       - name: run tests
         id: run-pytest
-        run: pytest test
+        run: pytest ./test
 
       - name: Fail if flake check fails
         if: steps.run-flake.outputs.success != 'true'
