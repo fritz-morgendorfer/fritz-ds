@@ -27,14 +27,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: cancel all outdated workflows
-        if: |
-          startsWith(github.ref, 'refs/heads/') || startsWith(github.event_name, 'pull_request')
-        uses: ./checks
-        with:
-          check: cancel-uncompleted-workflows
-          args: "--token ${{ secrets.GITHUB_TOKEN }} --workflows cw.yml --preserve-run most-recent"
-
       - name: enable python ${{ matrix.python-version }}
         uses: actions/setup-python@v5.4.0
         with:
