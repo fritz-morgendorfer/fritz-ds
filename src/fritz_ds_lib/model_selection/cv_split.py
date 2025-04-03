@@ -24,6 +24,7 @@ class RollingTimeSeriesSplit(ProjectBaseModel):
     max_period: datetime
     periods: int
     freq: str
+    col_date: str
 
     @property
     def _fcst_timestamps(self) -> list[datetime]:
@@ -34,6 +35,7 @@ class RollingTimeSeriesSplit(ProjectBaseModel):
 
     def split(self, X: ArrayLike, y: ArrayLike = None, groups: ArrayLike = None):
         """Generate indices to split data into training and test set."""
+        groups = X[self.col_date]
         for ts in self._fcst_timestamps:
             train_idx = groups < ts
             test_idx = groups == ts

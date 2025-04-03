@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, Optional, Self, TypeVar, Union, final
+from typing import Any, Optional, TypeVar, Union, final
 
 import pandas as pd
 from pandas import DataFrame
@@ -12,10 +12,15 @@ from pydantic import (
     model_validator,
 )
 from sklearn.datasets import fetch_openml
+from typing_extensions import Self
 
 from fritz_ds_lib.core.base import ProjectBaseModel
 from fritz_ds_lib.core.names import DatasetType
-from fritz_ds_lib.data_loading.utils import change_types
+from fritz_ds_lib.data_loading.utils import (
+    change_types,
+    edit_column_names,
+    rename_columns,
+)
 from fritz_ds_lib.model_selection.split import AbstractTrainTestSpliter
 from fritz_ds_lib.utils import load_from_dict
 
@@ -98,7 +103,7 @@ class DataLoader(ProjectBaseModel):
     test: Optional[SkipValidation[SerializeAsAny[RawDataLoader]]] = None
     spliter: Optional[SkipValidation[SerializeAsAny[AbstractTrainTestSpliter]]] = None
     target_name: Optional[str] = None
-    renaming_mapper: dict[str, str]
+    renaming_mapping: dict[str, str]
     parse_dates: list[str]
     dtype: dict[str, str]
 
@@ -108,10 +113,10 @@ class DataLoader(ProjectBaseModel):
             return self
         for dset in ["validation", "test"]:
             if (getattr(self, dset) is not None) and (
-                getattr(self.spliter, f"{dset}_size") is not None
+                getattr(self.spliter, dset) is not None
             ):
                 raise ValueError(f"Dataset {dset} is provided. No work for the spliter.")
-        if self.test is None and self.spliter.test_size is None:
+        if self.test is None and self.spliter.test is None:
             raise ValueError(
                 "Either test dataset or its size in the spliter must be provided."
             )
@@ -151,11 +156,11 @@ class DataLoader(ProjectBaseModel):
     def _validate_request(self, dataset: DatasetType) -> None:
         """Raise error if a dataset is requested that is against the config."""
         if getattr(self, dataset) is None and (
-            self.spliter is None or getattr(self.spliter, f"{dataset}_size") is None
+            self.spliter is None or getattr(self.spliter, f"{dataset}") is None
         ):
             raise ValueError(
                 f"No {dataset} dataset is provided "
-                f"and {dataset}_size of the spliter is set to zero."
+                f"and {dataset} of the spliter is set to zero."
             )
 
     def load(
@@ -165,9 +170,12 @@ class DataLoader(ProjectBaseModel):
         self._validate_request(dataset)
         loader = self._get_loader(dataset)
         df = loader.load()
-        df = change_types(df, self.dtype)
         if self._split_needed(dataset):
             df = self.spliter.split(df, dataset)
+
+        df = change_types(df, self.dtype, self.parse_dates)
+        df = rename_columns(df, self.renaming_mapping)
+        df = edit_column_names(df)
 
         # test data may include no target col
         if not return_x_y or (dataset == "test" and self.target_name not in df.columns):

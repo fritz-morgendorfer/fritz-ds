@@ -11,7 +11,7 @@ prep_pipeline:
         - age
     pipeline_obj_path: fritz_ds_example.titanic.pipelines.tree_based.make_pipeline
 estimator:
-    class: fritz_ds_lib.estimator.wrapper.SklearnClassifierWrapper
+    class: fritz_ds_lib.estimator.adapter.SklearnClassifier
     model_type: sklearn.ensemble.RandomForestClassifier
     params:
         bootstrap: true
@@ -23,3 +23,16 @@ estimator:
         min_weight_fraction_leaf: 0.0
         n_estimators: 150
         random_state: 42
+cv:
+    param_grid:
+        estimator__max_depth: [5, 10]
+        estimator__min_samples_leaf: [5, 10, 20]
+        estimator__n_estimators: [50, 100, 150]
+    scoring: neg_log_loss
+    spliter:
+        class: fritz_ds_lib.model_selection.config.SklearnCvSplit
+        sklearn_cls: sklearn.model_selection.StratifiedKFold
+        params:
+            n_splits: 3
+            shuffle: False
+            random_state: null

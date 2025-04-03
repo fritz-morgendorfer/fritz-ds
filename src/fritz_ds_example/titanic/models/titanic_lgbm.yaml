@@ -11,7 +11,7 @@ prep_pipeline:
         - age
     pipeline_obj_path: fritz_ds_example.titanic.pipelines.tree_based.make_pipeline
 estimator:
-    class: fritz_ds_lib.estimator.wrapper.LgbmClassifierWrapper
+    class: fritz_ds_lib.estimator.adapter.LgbmClassifier
     cols_categorical:
         - pclass
         - sex
@@ -44,7 +44,14 @@ estimator:
 cv:
     param_grid:
         estimator__max_depth: [10, 30]
-        estimator__min_data_in_leaf: [100, 300]
-        estimator__num_leaves: [31, 100, 200]
+        estimator__min_data_in_leaf: [5, 10, 15]
+        estimator__num_leaves: [10, 31, 100]
         estimator__n_estimators: [50, 100, 150]
     scoring: neg_log_loss
+    spliter:
+        class: fritz_ds_lib.model_selection.config.SklearnCvSplit
+        sklearn_cls: sklearn.model_selection.StratifiedKFold
+        params:
+            n_splits: 3
+            shuffle: False
+            random_state: null

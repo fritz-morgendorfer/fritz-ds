@@ -4,7 +4,7 @@ col_output: SalePrice_predicted
 col_idx: Id
 cols_features: []
 estimator:
-    class: fritz_ds.estimator.wrapper.LgbmRegressorWrapper
+    class: fritz_ds.estimator.adapter.LgbmRegressor
     cols_categorical: []
     params:
         bagging_fraction: 0.8

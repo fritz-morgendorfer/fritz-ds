@@ -12,7 +12,7 @@ from fritz_ds_lib.core.cereal import import_object
 T = TypeVar("T", bound=BaseEstimator)
 
 
-class AbstractEstimatorWrapper(BaseModel):
+class AbstractEstimator(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -43,12 +43,12 @@ class AbstractEstimatorWrapper(BaseModel):
         self.params.update(**params)
 
 
-class SklearnEstimatorWrapper(AbstractEstimatorWrapper):
+class SklearnEstimator(AbstractEstimator):
 
     model_type: Type[T]
 
     @field_validator("model_type", mode="before")
-    def _validate_model_type(cls, value: any) -> Type[T]:
+    def _validate_model_type(cls, value: Any) -> Type[T]:
         if isinstance(value, str):
             value = import_object(value)
         return value
@@ -68,20 +68,15 @@ class SklearnEstimatorWrapper(AbstractEstimatorWrapper):
         return self.model_.classes_
 
 
-SklearnClassifierWrapper = type(
-    "SklearnClassifierWrapper",
-    (*SklearnEstimatorWrapper.__mro__[:-1], ClassifierMixin, BaseEstimator),
-    dict(vars(SklearnEstimatorWrapper)),
-)
-
-SklearnRegressorWrapper = type(
-    "SklearnRegressorWrapper",
-    (*SklearnEstimatorWrapper.__mro__[:-1], RegressorMixin, BaseEstimator),
-    dict(vars(SklearnEstimatorWrapper)),
-)
+class SklearnClassifier(SklearnEstimator, ClassifierMixin, BaseEstimator):
+    ...
 
 
-class LgbmEstimatorWrapper(AbstractEstimatorWrapper):
+class SklearnRegressor(SklearnEstimator, RegressorMixin, BaseEstimator):
+    ...
+
+
+class LgbmEstimator(AbstractEstimator):
 
     model_: Optional[Booster] = None
     cols_categorical: list[str]
@@ -95,24 +90,19 @@ class LgbmEstimatorWrapper(AbstractEstimatorWrapper):
 
     def predict_proba(self, X):
         y_pred = self.model_.predict(X)
-        if self.params["objective"] == "binary":
+        if len(y_pred.shape) == 1:
             y_pred = np.c_[1 - y_pred, y_pred]
         return y_pred
 
     @property
     def classes_(self):
+        # TODO: find class labels in the booster
         return np.array([0, 1])
 
 
-LgbmClassifierWrapper = type(
-    "LgbmClassifierWrapper",
-    (*LgbmEstimatorWrapper.__mro__[:-1], ClassifierMixin, BaseEstimator),
-    dict(vars(LgbmEstimatorWrapper)),
-)
+class LgbmClassifier(LgbmEstimator, ClassifierMixin, BaseEstimator):
+    ...
 
 
-LgbmRegressorWrapper = type(
-    "LgbmRegressorWrapper",
-    (*LgbmEstimatorWrapper.__mro__[:-1], RegressorMixin, BaseEstimator),
-    dict(vars(LgbmEstimatorWrapper)),
-)
+class LgbmRegressor(LgbmEstimator, RegressorMixin, BaseEstimator):
+    ...

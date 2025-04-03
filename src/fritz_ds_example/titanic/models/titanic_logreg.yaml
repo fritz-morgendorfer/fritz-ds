@@ -11,7 +11,7 @@ prep_pipeline:
         - age
     pipeline_obj_path: fritz_ds_example.titanic.pipelines.linear_model.make_pipeline
 estimator:
-    class: fritz_ds_lib.estimator.wrapper.SklearnClassifierWrapper
+    class: fritz_ds_lib.estimator.adapter.SklearnClassifier
     model_type: sklearn.linear_model.LogisticRegression
     params:
         C: 1.0

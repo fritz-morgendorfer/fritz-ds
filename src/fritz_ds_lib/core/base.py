@@ -1,4 +1,14 @@
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict
+
+from fritz_ds_lib.utils import load_from_dict
+
+
+def validate_model(value: dict | Any) -> Any:
+    if isinstance(value, dict):
+        return load_from_dict(value)
+    return value
 
 
 class ProjectBaseModel(BaseModel):

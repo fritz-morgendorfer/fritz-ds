@@ -31,7 +31,7 @@ def cli_train(cfg: AppConfig) -> None:
 @click.option(
     "--dataset",
     type=click.Choice(["validation", "test"]),
-    default="cfg",
+    default="test",
 )
 @click.pass_obj
 def cli_predict(cfg: AppConfig, dataset: DatasetType) -> None:

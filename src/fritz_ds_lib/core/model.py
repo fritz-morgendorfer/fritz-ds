@@ -5,7 +5,8 @@ from sklearn.pipeline import Pipeline
 
 from fritz_ds_lib.core.base import ProjectBaseModel
 from fritz_ds_lib.core.pipeline import PipelineConfig
-from fritz_ds_lib.estimator.wrapper import AbstractEstimatorWrapper
+from fritz_ds_lib.estimator.adapter import AbstractEstimator
+from fritz_ds_lib.model_selection.config import CvConfig
 from fritz_ds_lib.utils import load_from_dict
 
 
@@ -13,9 +14,9 @@ class ModelConfig(ProjectBaseModel):
     col_target: str
     col_output: str
     col_idx: Optional[list[str]] = []
-    estimator: SkipValidation[SerializeAsAny[AbstractEstimatorWrapper]]
+    estimator: SkipValidation[SerializeAsAny[AbstractEstimator]]
     prep_pipeline: SkipValidation[SerializeAsAny[PipelineConfig]]
-    cv: Optional[dict[str, any]] = {}
+    cv: Optional[CvConfig] = None
 
     @property
     def pipeline(self) -> Pipeline:

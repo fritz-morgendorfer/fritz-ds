@@ -1,6 +1,7 @@
 # Style checks
 flake8
 flake8-isort==6.1.1
+flake8-print==4.0.0
 black==22.12.0
 isort==5.12.0
 pre-commit==4.0.1
