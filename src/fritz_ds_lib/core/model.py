@@ -1,13 +1,14 @@
-from typing import Any, Optional
+from importlib import import_module
+from typing import Any, Callable, Optional
 
 from pydantic import SerializeAsAny, SkipValidation, field_validator
 from sklearn.pipeline import Pipeline
 
 from fritz_ds_lib.core.base import ProjectBaseModel
-from fritz_ds_lib.core.pipeline import PipelineConfig
 from fritz_ds_lib.estimator.adapter import AbstractEstimator
 from fritz_ds_lib.model_selection.config import CvConfig
-from fritz_ds_lib.utils import load_from_dict
+from fritz_ds_lib.pipeline.base import PipelineConfig
+from fritz_ds_lib.utils.utils import load_from_dict
 
 
 class ModelConfig(ProjectBaseModel):
@@ -17,6 +18,7 @@ class ModelConfig(ProjectBaseModel):
     estimator: SkipValidation[SerializeAsAny[AbstractEstimator]]
     prep_pipeline: SkipValidation[SerializeAsAny[PipelineConfig]]
     cv: Optional[CvConfig] = None
+    evaluation: list[Callable]
 
     @property
     def pipeline(self) -> Pipeline:
@@ -32,3 +34,9 @@ class ModelConfig(ProjectBaseModel):
         if isinstance(value, dict):
             return load_from_dict(value)
         return value
+
+    @field_validator("evaluation", mode="before")
+    @classmethod
+    def _validate_metrics(cls, value: list[str]) -> list[Callable]:
+        module = import_module("fritz_ds_lib.evaluation.metrics")
+        return [getattr(module, m) for m in value]

@@ -1,0 +1,14 @@
+---
+class: fritz_ds_lib.core.model.ModelConfig
+col_target: SalePrice
+col_output: SalePrice_predicted
+col_idx:
+    - Id
+prep_pipeline:
+    class: fritz_ds_lib.pipeline.base.PipelineConfig
+    pipeline_obj_path: fritz_ds_lib.pipeline.simple.do_nothing_pipeline
+estimator:
+    class: fritz_ds_lib.estimator.simple.AverageValueRegressor
+    params: {}
+evaluation:
+    - mean_squared_error

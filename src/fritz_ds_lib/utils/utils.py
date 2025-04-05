@@ -8,6 +8,7 @@ import yaml
 from pydantic import BaseModel, TypeAdapter
 
 from fritz_ds_lib.core.cereal import import_object
+from fritz_ds_lib.utils.yaml import configure_yaml_loader
 
 
 def read_config_file(package_path, filename):
@@ -64,6 +65,7 @@ def load_from_package(package_path: str, filename: str) -> BaseModel:
 
 
 def load_from_file(path: Union[str, Path]) -> BaseModel:
+    loader = configure_yaml_loader()
     with open(path, "r") as f:
-        cfg = yaml.safe_load(f)
+        cfg = yaml.load(f, loader)
     return load_from_dict(cfg)

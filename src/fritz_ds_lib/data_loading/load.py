@@ -22,7 +22,7 @@ from fritz_ds_lib.data_loading.utils import (
     rename_columns,
 )
 from fritz_ds_lib.model_selection.split import AbstractTrainTestSpliter
-from fritz_ds_lib.utils import load_from_dict
+from fritz_ds_lib.utils.utils import load_from_dict
 
 
 class AbstractRawDataLoader(BaseModel):

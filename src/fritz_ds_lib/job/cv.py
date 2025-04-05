@@ -2,7 +2,7 @@ from sklearn.model_selection import GridSearchCV
 
 from fritz_ds_lib.cli.config import AppConfig
 from fritz_ds_lib.cli.utils import save_model
-from fritz_ds_lib.utils import init_logger
+from fritz_ds_lib.utils.utils import init_logger
 
 
 def cv(cfg: AppConfig) -> None:

@@ -1,0 +1,32 @@
+---
+class: fritz_ds_lib.core.model.ModelConfig
+col_target: SalePrice
+col_output: SalePrice_predicted
+col_idx:
+    - Id
+prep_pipeline:
+    class: fritz_ds_example.housing.pipelines.linear_model.HousingLinearModelPipeCfg
+    cols_features:
+        - OverallQual
+        - GarageCars
+        - 1stFlrSF
+        - FullBath
+        - YearBuilt
+        - Fireplaces
+        - KitchenQual
+        - ExterQual
+    cols_categorical: &cols_categorical
+        - KitchenQual
+        - ExterQual
+    pipeline_obj_path: fritz_ds_example.housing.pipelines.linear_model.make_pipeline
+estimator:
+    class: fritz_ds_lib.estimator.adapter.SklearnRegressor
+    model_type: sklearn.linear_model.SGDRegressor
+    params:
+        alpha: 1
+        loss: squared_error
+        max_iter: 1000
+        penalty: l2
+        random_state: 42
+evaluation:
+    - mean_squared_error

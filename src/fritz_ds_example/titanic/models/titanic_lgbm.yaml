@@ -55,3 +55,5 @@ cv:
             n_splits: 3
             shuffle: False
             random_state: null
+evaluation:
+    - roc_auc_score

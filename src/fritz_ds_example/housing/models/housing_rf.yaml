@@ -15,45 +15,28 @@ prep_pipeline:
         - Fireplaces
         - KitchenQual
         - ExterQual
-    cols_categorical: &cols_categorical
+        - YrSold
+    cols_categorical:
         - KitchenQual
         - ExterQual
     pipeline_obj_path: fritz_ds_example.housing.pipelines.tree_based.make_pipeline
 estimator:
-    class: fritz_ds_lib.estimator.adapter.LgbmRegressor
-    cols_categorical: !flatten
-        - *cols_categorical
+    class: fritz_ds_lib.estimator.adapter.SklearnRegressor
+    model_type: sklearn.ensemble.RandomForestRegressor
     params:
-        bagging_fraction: 0.8
-        bagging_freq: 0
-        boosting: gbdt
-        cat_l2: 10.0
-        cat_smooth: 10.0
-        device_type: cpu
-        early_stopping_rounds: -1
-        extra_trees: false
-        feature_fraction: 1.0
-        lambda_l1: 0.0
-        lambda_l2: 0.0
-        learning_rate: 0.3
-        linear_lambda: 0.0
-        max_cat_to_onehot: 4
-        max_depth: 30
-        min_data_in_leaf: 5
-        n_estimators: 100
-        num_leaves: 31
-        num_threads: -1
-        objective: l2
-        seed: 42
-        tree_learner: serial
-        use_missing: true
-        verbosity: 0
-        zero_as_missing: false
+        bootstrap: true
+        criterion: squared_error
+        max_depth: 10
+        max_features: 0.8
+        min_samples_leaf: 5
+        min_samples_split: 2
+        min_weight_fraction_leaf: 0.0
+        n_estimators: 150
+        random_state: 42
 cv:
     param_grid:
-        estimator__max_depth: [10, 20, 30]
-        estimator__min_data_in_leaf: [5, 10, 20, 30]
-        estimator__num_leaves: [15, 31, 63]
+        estimator__max_depth: [5, 10, 20, 30]
+        estimator__min_samples_leaf: [3, 5, 8, 13]
         estimator__n_estimators: [50, 100, 150]
     scoring: neg_mean_squared_error
     spliter:

@@ -4,20 +4,19 @@ from typing import Any, Optional, Type, TypeVar
 import lightgbm as lgbm
 import numpy as np
 from lightgbm import Booster, Dataset
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import field_validator
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 
+from fritz_ds_lib.core.base import ProjectBaseModel
 from fritz_ds_lib.core.cereal import import_object
 
 T = TypeVar("T", bound=BaseEstimator)
 
 
-class AbstractEstimator(BaseModel):
+class AbstractEstimator(ProjectBaseModel):
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    model_: Optional[T] = None
     params: dict[str, Any]
+    model_: Optional[T] = None
 
     def __sklearn_clone__(self):
         values = {k: v for (k, v) in dict(vars(self)).items() if k != "model_"}

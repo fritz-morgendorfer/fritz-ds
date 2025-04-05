@@ -77,7 +77,7 @@ class TimeSeriesTrainTestSpliter(AbstractTrainTestSpliter):
             case "test":
                 if self.test is None:
                     raise ValueError("Test is not in the spliter config.")
-                return df[df[self.time_col].between_time(start_time=self.test)]
+                return df[df[self.time_col] >= self.test]
             case "validation":
                 if self.validation is None:
                     raise ValueError("Validation is not in the spliter config.")

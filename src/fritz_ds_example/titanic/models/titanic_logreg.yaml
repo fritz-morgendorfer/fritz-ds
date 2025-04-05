@@ -19,3 +19,5 @@ estimator:
         penalty: l2
         random_state: 42
         solver: lbfgs
+evaluation:
+    - roc_auc_score

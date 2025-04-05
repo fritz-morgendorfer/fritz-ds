@@ -1,6 +1,6 @@
 from fritz_ds_lib.cli.config import AppConfig
 from fritz_ds_lib.cli.utils import save_model
-from fritz_ds_lib.utils import init_logger
+from fritz_ds_lib.utils.utils import init_logger
 
 
 def train(cfg: AppConfig) -> None:
@@ -11,7 +11,7 @@ def train(cfg: AppConfig) -> None:
 
     logger.info("Loading data.")
     df, _ = cfg.loader.load("train")
-    y_train = df[model_cfg.col_target].values
+    y_train = df[model_cfg.col_target]
 
     logger.info("Starting pipeline.")
     pipe = model_cfg.pipeline

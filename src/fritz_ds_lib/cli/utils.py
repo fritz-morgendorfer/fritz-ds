@@ -27,7 +27,7 @@ def save_model(model, cfg, filename):
 
 def save_dataframe(df, cfg):
     folder = _prepare_folder_for_saving(cfg)
-    df.to_csv(folder / cfg.pred_df_file_name, index=False)
+    df.to_csv(folder / cfg.pred_df_file_name)
 
 
 def load_dataframe(cfg):

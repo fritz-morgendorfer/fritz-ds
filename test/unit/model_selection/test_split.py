@@ -53,7 +53,6 @@ class TestSklearnTrainTestSpliter:
         for ds in DATASET_TYPES:
             # new spliter instance for each dataset type
             spliter = get_spliter()
-            print(id(spliter))
             if getattr(spliter, ds) is not None:
                 sets.append(spliter.split(df, ds)["val"])
         assert len(set(chain(*sets))) == sum([len(s) for s in sets])

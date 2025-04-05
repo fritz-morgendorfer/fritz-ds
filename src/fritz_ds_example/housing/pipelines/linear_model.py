@@ -6,14 +6,16 @@ from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from fritz_ds_lib.pipeline.base import PipelineConfig
 
 
-class TitanicLinearModelPipeCfg(PipelineConfig):
-    cols_used: list[str]
+class HousingLinearModelPipeCfg(PipelineConfig):
+    cols_features: list[str]
+    cols_categorical: list[str]
 
 
-def make_pipeline(cfg: TitanicLinearModelPipeCfg):
+def make_pipeline(cfg: HousingLinearModelPipeCfg):
+    col_numerical = list(set(cfg.cols_features).difference(cfg.cols_categorical))
     selector = ColumnTransformer(
         [
-            ("selector", "passthrough", cfg.cols_used),
+            ("selector", "passthrough", cfg.cols_features),
         ],
         remainder="drop",
         verbose_feature_names_out=False,
@@ -21,7 +23,7 @@ def make_pipeline(cfg: TitanicLinearModelPipeCfg):
 
     imputer = ColumnTransformer(
         [
-            ("mean_imp", SimpleImputer(), ["age"]),
+            ("mean_imp", SimpleImputer(), col_numerical),
         ],
         remainder="passthrough",
         verbose_feature_names_out=False,
@@ -29,7 +31,7 @@ def make_pipeline(cfg: TitanicLinearModelPipeCfg):
 
     scaler = ColumnTransformer(
         [
-            ("scaler", MinMaxScaler(), ["age"]),
+            ("scaler", MinMaxScaler(), col_numerical),
         ],
         remainder="passthrough",
         verbose_feature_names_out=False,
@@ -40,7 +42,7 @@ def make_pipeline(cfg: TitanicLinearModelPipeCfg):
             (
                 "oh_enc",
                 OneHotEncoder(drop="first", sparse_output=False),
-                ["pclass", "sex"],
+                cfg.cols_categorical,
             ),
         ],
         remainder="passthrough",

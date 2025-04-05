@@ -4,7 +4,7 @@ from pydantic import BaseModel, SkipValidation, field_validator
 
 from fritz_ds_lib.core.model import ModelConfig
 from fritz_ds_lib.data_loading.load import DataLoader
-from fritz_ds_lib.utils import load_from_file
+from fritz_ds_lib.utils.utils import load_from_file
 
 
 class AppConfig(BaseModel):

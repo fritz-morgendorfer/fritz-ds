@@ -1,0 +1,17 @@
+first_list:
+  elements: &first
+    - 1
+    - 2
+second_list:
+  elements: &second
+    - 3
+third_list: &third
+  - 4
+  - 5
+flattened_list:
+  elements: !flatten
+    - *first
+    - *second
+    - *third
+    - [6, 7]
+    - 8

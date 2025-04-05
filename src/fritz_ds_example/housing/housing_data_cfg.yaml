@@ -5,10 +5,15 @@ train:
   name: house_prices
   version: 1
 spliter:
-  class: fritz_ds_lib.model_selection.split.TimeSeriesTrainTestSpliter
-  validation: 2009-03-01
-  test: 2009-11-01
-  time_col: TimeSold
+#  class: fritz_ds_lib.model_selection.split.TimeSeriesTrainTestSpliter
+#  validation: 2009-03-01
+#  test: 2009-11-01
+#  time_col: TimeSold
+  class: fritz_ds_lib.model_selection.split.SklearnTrainTestSpliter
+  train: 0.7
+#  validation: 0.15
+  test: 0.3
+  random_state: 42
 target_name: SalePrice
 renaming_mapping: {}
 parse_dates: []

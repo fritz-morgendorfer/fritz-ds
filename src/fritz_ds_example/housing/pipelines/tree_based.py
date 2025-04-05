@@ -5,11 +5,12 @@ from sklearn.preprocessing import OrdinalEncoder
 from fritz_ds_lib.pipeline.base import PipelineConfig
 
 
-class TitanicTreeBasedPipeCfg(PipelineConfig):
+class TreeBasedPipeCfg(PipelineConfig):
     cols_features: list[str]
+    cols_categorical: list[str]
 
 
-def make_pipeline(cfg: TitanicTreeBasedPipeCfg):
+def make_pipeline(cfg: TreeBasedPipeCfg):
     encoder = ColumnTransformer(
         [
             (
@@ -19,7 +20,7 @@ def make_pipeline(cfg: TitanicTreeBasedPipeCfg):
                     handle_unknown="use_encoded_value",
                     unknown_value=-2,
                 ),
-                ["pclass", "sex"],
+                cfg.cols_categorical,
             ),
         ],
         remainder="passthrough",
@@ -34,6 +35,9 @@ def make_pipeline(cfg: TitanicTreeBasedPipeCfg):
         verbose_feature_names_out=False,
     )
 
-    steps = [("encoder", encoder), ("selector", selector)]
+    steps = [
+        ("encoder", encoder),
+        ("selector", selector),
+    ]
     pipeline = Pipeline(steps=steps).set_output(transform="pandas")
     return pipeline
