@@ -6,6 +6,6 @@ pandas~=2.2.3
 scikit-learn~=1.6.1
 seaborn~=0.13.2
 pyaml
-pydantic>=2, <3
+pydantic~=2.11.1
 pydantic-cereal~=0.0.6
 ydata-profiling~=4.16.0
