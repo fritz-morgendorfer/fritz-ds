@@ -1,5 +1,6 @@
 ---
 class: fritz_ds_lib.core.model.ModelConfig
+name: sgd
 col_target: SalePrice
 col_output: SalePrice_predicted
 col_idx:
@@ -29,4 +30,4 @@ estimator:
         penalty: l2
         random_state: 42
 evaluation:
-    - mean_squared_error
+    - root_mean_squared_error

@@ -54,3 +54,9 @@ pipe --cfg src/fritz_ds_example/titanic/app.yaml evaluate
 ```sh
 pipe --cfg src/fritz_ds_example/titanic/app.yaml cv
 ```
+
+### The --do-all option
+
+All four commands listed above can be used with the `--do-all` flag.</br>
+In this case not only the model chosen in the app config will be used,
+but all models found in the `model_cfg_folder` directory.

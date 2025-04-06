@@ -10,6 +10,9 @@ def cv(cfg: AppConfig) -> None:
     logger = init_logger()
 
     model_cfg = cfg.model_cfg
+    if model_cfg.cv is None:
+        logger.info("The model has no cross-validation config. Finishing")
+        return
 
     logger.info("Loading data.")
     df, y = cfg.loader.load("train")
@@ -24,4 +27,9 @@ def cv(cfg: AppConfig) -> None:
     )
     logger.info("Starting cross validation.")
     grid_search.fit(df, target)
-    save_model(grid_search.best_estimator_, cfg, cfg.cv_model_file_name)
+    save_model(grid_search.best_estimator_, cfg.cv_model_path)
+
+
+def cv_all(cfg: AppConfig) -> None:
+    for cfg_ in cfg.iter_models:
+        cv(cfg_)

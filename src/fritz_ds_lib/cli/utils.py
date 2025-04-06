@@ -1,36 +1,22 @@
-import os
 from pathlib import Path
-from typing import Literal
+from typing import Union
 
 import joblib
 import pandas as pd
 
-from fritz_ds_lib.cli.config import AppConfig
 
-
-def _prepare_folder_for_saving(cfg: AppConfig):
-    folder = Path(cfg.output_folder) / cfg.model_cfg.col_target
-    os.makedirs(folder, exist_ok=True)
-    return folder
-
-
-def load_model(cfg, source: Literal["cv", "train"]):
-    folder = Path(cfg.output_folder) / cfg.model_cfg.col_target
-    model = joblib.load(folder / cfg.get_model_file_name(source))
+def load_model(path: Union[str | Path]):
+    model = joblib.load(path)
     return model
 
 
-def save_model(model, cfg, filename):
-    folder = _prepare_folder_for_saving(cfg)
-    joblib.dump(model, folder / filename)
+def save_model(model, path: Union[str | Path]):
+    joblib.dump(model, path)
 
 
-def save_dataframe(df, cfg):
-    folder = _prepare_folder_for_saving(cfg)
-    df.to_csv(folder / cfg.pred_df_file_name)
+def save_dataframe(df, path: Union[str | Path]):
+    df.to_csv(path)
 
 
-def load_dataframe(cfg):
-    folder = Path(cfg.output_folder) / cfg.model_cfg.col_target
-    path = folder / cfg.pred_df_file_name
+def load_dataframe(path: Union[str | Path]):
     return pd.read_csv(path)

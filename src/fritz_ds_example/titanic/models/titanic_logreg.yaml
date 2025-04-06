@@ -1,5 +1,6 @@
 ---
 class: fritz_ds_lib.core.model.ModelConfig
+name: logreg
 col_target: survived
 col_output: survived_hat
 col_idx: null

@@ -12,6 +12,7 @@ from fritz_ds_lib.utils.utils import load_from_dict
 
 
 class ModelConfig(ProjectBaseModel):
+    name: str
     col_target: str
     col_output: str
     col_idx: Optional[list[str]] = []

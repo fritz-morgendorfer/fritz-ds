@@ -22,9 +22,13 @@ def cli(ctx, cfg):
 
 
 @cli.command("train")
+@click.option("--do-all/--no-all", default=False)
 @click.pass_obj
-def cli_train(cfg: AppConfig) -> None:
-    train.train(cfg)
+def cli_train(cfg: AppConfig, do_all: bool) -> None:
+    if do_all:
+        train.train_all(cfg)
+    else:
+        train.train(cfg)
 
 
 @cli.command("predict")
@@ -33,9 +37,13 @@ def cli_train(cfg: AppConfig) -> None:
     type=click.Choice(["validation", "test"]),
     default="test",
 )
+@click.option("--do-all/--no-all", default=False)
 @click.pass_obj
-def cli_predict(cfg: AppConfig, dataset: DatasetType) -> None:
-    predict.predict(cfg, dataset)
+def cli_predict(cfg: AppConfig, dataset: DatasetType, do_all: bool) -> None:
+    if do_all:
+        predict.predict_all(cfg, dataset)
+    else:
+        predict.predict(cfg, dataset)
 
 
 @cli.command("evaluate")
@@ -44,15 +52,23 @@ def cli_predict(cfg: AppConfig, dataset: DatasetType) -> None:
     type=click.Choice(["validation", "test"]),
     default="test",
 )
+@click.option("--do-all/--no-all", default=False)
 @click.pass_obj
-def cli_evaluate(cfg: AppConfig, dataset: DatasetType) -> None:
-    evaluate.evaluate(cfg, dataset)
+def cli_evaluate(cfg: AppConfig, dataset: DatasetType, do_all: bool) -> None:
+    if do_all:
+        evaluate.evaluate_all(cfg, dataset)
+    else:
+        evaluate.evaluate(cfg, dataset)
 
 
 @cli.command("cv")
+@click.option("--do-all/--no-all", default=False)
 @click.pass_obj
-def cli_cv(cfg: AppConfig) -> None:
-    cv.cv(cfg)
+def cli_cv(cfg: AppConfig, do_all: bool) -> None:
+    if do_all:
+        cv.cv_all(cfg)
+    else:
+        cv.cv(cfg)
 
 
 if __name__ == '__main__':

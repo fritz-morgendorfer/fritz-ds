@@ -1,5 +1,6 @@
 ---
 class: fritz_ds_lib.core.model.ModelConfig
+name: rf
 col_target: SalePrice
 col_output: SalePrice_predicted
 col_idx:
@@ -52,4 +53,4 @@ cv:
             shuffle: False
             random_state: null
 evaluation:
-    - mean_squared_error
+    - root_mean_squared_error

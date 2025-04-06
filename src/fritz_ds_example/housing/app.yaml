@@ -1,10 +1,8 @@
 ---
 loader: src/fritz_ds_example/housing/housing_data_cfg.yaml
-model_cfg: src/fritz_ds_example/housing/models/housing_lgbm.yaml
-#model_cfg: src/fritz_ds_example/housing/models/housing_rf.yaml
-#model_cfg: src/fritz_ds_example/housing/models/housing_average.yaml
-#model_cfg: src/fritz_ds_example/housing/models/housing_sgd.yaml
+model_cfg: housing_lgbm.yaml
+model_cfg_folder: src/fritz_ds_example/housing/models
 output_folder: outputs
-cv_model_file_name: best_cv_model.yaml
-trained_model_file_name: trained_model.yaml
-pred_df_file_name: predictions.csv
+cv_model_file_name: best_cv_{model_name}_model.yaml
+trained_model_file_name: trained_{model_name}_model.yaml
+pred_df_file_name: predictions_{model_name}.csv

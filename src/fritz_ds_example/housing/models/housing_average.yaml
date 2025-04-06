@@ -1,5 +1,6 @@
 ---
 class: fritz_ds_lib.core.model.ModelConfig
+name: avg
 col_target: SalePrice
 col_output: SalePrice_predicted
 col_idx:
@@ -11,4 +12,4 @@ estimator:
     class: fritz_ds_lib.estimator.simple.AverageValueRegressor
     params: {}
 evaluation:
-    - mean_squared_error
+    - root_mean_squared_error

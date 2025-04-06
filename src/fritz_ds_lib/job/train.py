@@ -4,7 +4,6 @@ from fritz_ds_lib.utils.utils import init_logger
 
 
 def train(cfg: AppConfig) -> None:
-
     logger = init_logger()
 
     model_cfg = cfg.model_cfg
@@ -16,4 +15,9 @@ def train(cfg: AppConfig) -> None:
     logger.info("Starting pipeline.")
     pipe = model_cfg.pipeline
     pipe.fit(df, y_train)
-    save_model(pipe, cfg, cfg.trained_model_file_name)
+    save_model(pipe, cfg.train_model_path)
+
+
+def train_all(cfg: AppConfig) -> None:
+    for cfg_ in cfg.iter_models:
+        train(cfg_)
