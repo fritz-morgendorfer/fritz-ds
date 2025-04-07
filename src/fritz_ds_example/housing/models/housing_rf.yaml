@@ -2,7 +2,7 @@
 class: fritz_ds_lib.core.model.ModelConfig
 name: rf
 col_target: SalePrice
-col_output: SalePrice_predicted
+col_output: &out_cols [SalePrice_predicted]
 col_idx:
     - Id
 prep_pipeline:
@@ -53,4 +53,7 @@ cv:
             shuffle: False
             random_state: null
 evaluation:
-    - root_mean_squared_error
+    use_columns: !flatten
+        - *out_cols
+    metrics:
+        - root_mean_squared_error

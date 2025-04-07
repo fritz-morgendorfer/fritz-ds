@@ -1,3 +1,4 @@
+import copy
 import os
 from pathlib import Path
 from typing import Any
@@ -60,6 +61,6 @@ class AppConfig(BaseModel):
     @property
     def iter_models(self):
         for filepath in Path(self.model_cfg_folder).glob("*.yaml"):
-            params = vars(self)
+            params = copy.deepcopy(vars(self))
             params["model_cfg"] = filepath.name
             yield AppConfig(**params)

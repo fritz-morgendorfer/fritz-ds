@@ -10,11 +10,11 @@ def evaluate(cfg: AppConfig, dataset: DatasetType) -> None:
     y_pred = load_dataframe(cfg.predictions_path)
     _, y_true = cfg.loader.load(dataset, return_x_y=True)
 
-    y_pred = y_pred[cfg.model_cfg.col_output]
-    y_true = y_true[cfg.model_cfg.col_target]
-
+    y_pred = y_pred[cfg.model_cfg.evaluation.use_columns]
+    y_true = y_true[[cfg.model_cfg.col_target]]
     results = {
-        metric.__name__: metric(y_true, y_pred) for metric in cfg.model_cfg.evaluation
+        metric.__name__: metric(y_true, y_pred)
+        for metric in cfg.model_cfg.evaluation.metrics
     }
     logger.info(f"Metrics for model {cfg.model_cfg.name} are {results}")
 

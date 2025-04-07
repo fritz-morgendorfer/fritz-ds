@@ -18,6 +18,17 @@ class AbstractEstimator(ProjectBaseModel):
     params: dict[str, Any]
     model_: Optional[T] = None
 
+    # TODO: use pydantic's third party type validation
+    @field_validator("params")
+    def _validate_sklearn_classes(cls, values: Any) -> Any:
+        if not isinstance(values, dict):
+            return values
+        for k, v in values.items():
+            if isinstance(v, dict) and "sklearn_class" in v:
+                kls = v.pop("sklearn_class")
+                values[k] = import_object(kls)(**v)
+        return values
+
     def __sklearn_clone__(self):
         values = {k: v for (k, v) in dict(vars(self)).items() if k != "model_"}
         return self.__class__(**values)
