@@ -2,7 +2,7 @@
 class: fritz_ds_lib.core.model.ModelConfig
 name: sgd
 col_target: SalePrice
-col_output: SalePrice_predicted
+col_output: &out_cols [SalePrice_predicted]
 col_idx:
     - Id
 prep_pipeline:
@@ -30,4 +30,7 @@ estimator:
         penalty: l2
         random_state: 42
 evaluation:
-    - root_mean_squared_error
+    use_columns: !flatten
+        - *out_cols
+    metrics:
+        - root_mean_squared_error

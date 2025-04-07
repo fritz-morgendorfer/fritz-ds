@@ -53,8 +53,6 @@ def load_from_dict(cfg: dict[str, Any]) -> BaseModel:
     dotted_path = cfg.get("class")
     if dotted_path is None:
         raise ValueError("Could not find dotted import path.")
-    # module, _, classname = dotted_path.rpartition(".")
-    # cls = getattr(import_module(module), classname)
     cls = import_object(dotted_path)
     return TypeAdapter(cls).validate_python(cfg)
 

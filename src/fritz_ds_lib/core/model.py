@@ -1,5 +1,5 @@
 from importlib import import_module
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Literal, Optional
 
 from pydantic import SerializeAsAny, SkipValidation, field_validator
 from sklearn.pipeline import Pipeline
@@ -11,15 +11,27 @@ from fritz_ds_lib.pipeline.base import PipelineConfig
 from fritz_ds_lib.utils.utils import load_from_dict
 
 
+class EvaluationConfig(ProjectBaseModel):
+    metrics: list[Callable]
+    use_columns: list[str] = None
+
+    @field_validator("metrics", mode="before")
+    @classmethod
+    def _validate_metrics(cls, value: list[str]) -> list[Callable]:
+        module = import_module("sklearn.metrics")
+        return [getattr(module, m) for m in value]
+
+
 class ModelConfig(ProjectBaseModel):
     name: str
     col_target: str
-    col_output: str
+    col_output: list[str]
     col_idx: Optional[list[str]] = []
-    estimator: SkipValidation[SerializeAsAny[AbstractEstimator]]
     prep_pipeline: SkipValidation[SerializeAsAny[PipelineConfig]]
+    estimator: SkipValidation[SerializeAsAny[AbstractEstimator]]
+    predict: Literal["predict", "predict_proba"] = "predict"
     cv: Optional[CvConfig] = None
-    evaluation: list[Callable]
+    evaluation: EvaluationConfig
 
     @property
     def pipeline(self) -> Pipeline:
@@ -35,9 +47,3 @@ class ModelConfig(ProjectBaseModel):
         if isinstance(value, dict):
             return load_from_dict(value)
         return value
-
-    @field_validator("evaluation", mode="before")
-    @classmethod
-    def _validate_metrics(cls, value: list[str]) -> list[Callable]:
-        module = import_module("fritz_ds_lib.evaluation.metrics")
-        return [getattr(module, m) for m in value]

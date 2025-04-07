@@ -2,7 +2,7 @@
 class: fritz_ds_lib.core.model.ModelConfig
 name: rf
 col_target: survived
-col_output: survived_hat
+col_output: ["0", "1"]
 col_idx: null
 prep_pipeline:
     class: fritz_ds_example.titanic.pipelines.tree_based.TitanicTreeBasedPipeCfg
@@ -24,6 +24,7 @@ estimator:
         min_weight_fraction_leaf: 0.0
         n_estimators: 150
         random_state: 42
+predict: predict_proba
 cv:
     param_grid:
         estimator__max_depth: [5, 10]
@@ -38,4 +39,6 @@ cv:
             shuffle: False
             random_state: null
 evaluation:
-    - roc_auc_score
+    use_columns: ["1"]
+    metrics:
+        - roc_auc_score

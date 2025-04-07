@@ -2,7 +2,7 @@
 class: fritz_ds_lib.core.model.ModelConfig
 name: logreg
 col_target: survived
-col_output: survived_hat
+col_output: ["0", "1"]
 col_idx: null
 prep_pipeline:
     class: fritz_ds_example.titanic.pipelines.linear_model.TitanicLinearModelPipeCfg
@@ -20,5 +20,8 @@ estimator:
         penalty: l2
         random_state: 42
         solver: lbfgs
+predict: predict_proba
 evaluation:
-    - roc_auc_score
+    use_columns: ["1"]
+    metrics:
+        - roc_auc_score
