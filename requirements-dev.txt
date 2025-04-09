@@ -1,3 +1,6 @@
+# interactive development
+jupyter~=1.1.1
+
 # Style checks
 flake8
 flake8-isort==6.1.1

@@ -26,9 +26,20 @@ estimator:
     params:
         alpha: 1
         loss: squared_error
-        max_iter: 1000
+        max_iter: 2000
         penalty: l2
         random_state: 42
+cv:
+    param_grid:
+        estimator__loss: ["squared_error", "huber"]
+        estimator__penalty: ["l2", "l1"]
+    scoring: neg_mean_squared_error
+    spliter:
+        class: fritz_ds_lib.model_selection.cv_split.RollingTimeSeriesSplit
+        max_period: 2009-10-01
+        periods: 10
+        freq: "MS"
+        col_date: DateSold
 evaluation:
     use_columns: !flatten
         - *out_cols

@@ -64,7 +64,7 @@ class SklearnTrainTestSpliter(AbstractTrainTestSpliter):
         return locals()[f"X_{dataset_type}"]
 
 
-class TimeSeriesTrainTestSpliter(AbstractTrainTestSpliter):
+class TimeBasedTrainTestSpliter(AbstractTrainTestSpliter):
 
     train: datetime = None
     validation: datetime = None

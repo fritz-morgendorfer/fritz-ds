@@ -25,31 +25,13 @@ estimator:
     cols_categorical: !flatten
         - *cols_categorical
     params:
-#        bagging_fraction: 0.8
-#        bagging_freq: 0
-#        boosting: gbdt
-#        cat_l2: 10.0
-#        cat_smooth: 10.0
-#        device_type: cpu
-#        early_stopping_rounds: -1
-#        extra_trees: false
-#        feature_fraction: 1.0
-#        lambda_l1: 0.0
-#        lambda_l2: 0.0
-#        learning_rate: 0.3
-#        linear_lambda: 0.0
-#        max_cat_to_onehot: 4
         max_depth: 30
         min_data_in_leaf: 5
         n_estimators: 100
         num_leaves: 31
-#        num_threads: -1
         objective: l2
-#        seed: 42
-#        tree_learner: serial
-#        use_missing: true
-#        verbosity: 0
-#        zero_as_missing: false
+        seed: 42
+        use_missing: true
 cv:
     param_grid:
         estimator__max_depth: [10, 20, 30]
@@ -58,17 +40,11 @@ cv:
         estimator__n_estimators: [50, 100, 150]
     scoring: neg_mean_squared_error
     spliter:
-#        class: fritz_ds_lib.model_selection.cv_split.RollingTimeSeriesSplit
-#        max_period: 2009-10-01
-#        periods: 5
-#        freq: "M"
-#        col_date: TimeSold
-        class: fritz_ds_lib.model_selection.config.SklearnCvSplit
-        sklearn_cls: sklearn.model_selection.KFold
-        params:
-            n_splits: 3
-            shuffle: False
-            random_state: null
+        class: fritz_ds_lib.model_selection.cv_split.RollingTimeSeriesSplit
+        max_period: 2009-10-01
+        periods: 10
+        freq: "MS"
+        col_date: DateSold
 evaluation:
     use_columns: !flatten
         - *out_cols

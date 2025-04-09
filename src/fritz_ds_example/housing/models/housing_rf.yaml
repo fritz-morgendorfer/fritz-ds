@@ -41,17 +41,11 @@ cv:
         estimator__n_estimators: [50, 100, 150]
     scoring: neg_mean_squared_error
     spliter:
-#        class: fritz_ds_lib.model_selection.cv_split.RollingTimeSeriesSplit
-#        max_period: 2009-10-01
-#        periods: 5
-#        freq: "M"
-#        col_date: TimeSold
-        class: fritz_ds_lib.model_selection.config.SklearnCvSplit
-        sklearn_cls: sklearn.model_selection.KFold
-        params:
-            n_splits: 3
-            shuffle: False
-            random_state: null
+        class: fritz_ds_lib.model_selection.cv_split.RollingTimeSeriesSplit
+        max_period: 2009-10-01
+        periods: 10
+        freq: "MS"
+        col_date: DateSold
 evaluation:
     use_columns: !flatten
         - *out_cols
